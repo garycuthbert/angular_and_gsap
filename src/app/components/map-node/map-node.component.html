@@ -1,5 +1,5 @@
-<svg [attr.x]="node.xPos"
-     [attr.y]="node.yPos"
+<svg [attr.x]="0"
+     [attr.y]="0"
      [attr.width]="nodeWidth"
      [attr.height]="nodeHeight"
      [attr.viewbox]="nodeViewBox">
@@ -19,27 +19,18 @@
     </filter>
   </defs>
 
-  <!-- node "greying" -->
-  <g [style.fill]="(!node.disabled) ? '#666666' : null">
+  <!-- node Highlighting -->
+  <g [style.filter]="nodeHighlightState !== 'None' ? nodeHighlightFilterUrl : null" (mouseenter)="isHovering=true" (mouseleave)="isHovering=false">
+      <svg x="40" y="40" [attr.width]="coreWidth" [attr.height]="coreHeight" [attr.viewBox]="coreViewBox">
 
-    <!-- node Highlighting -->
-    <g [style.filter]="nodeHighlightState !== 'None' ? nodeHighlightFilterUrl : null" (mouseenter)="isHovering=true" (mouseleave)="isHovering=false">
-
-      <g>
-        <svg x="40" y="40" [attr.width]="coreWidth" [attr.height]="coreHeight" [attr.viewBox]="coreViewBox"
-          [style.filter]="node.disabled ? 'url(#node-icon-map-dim-' + tabIndex + ')' : null">
-
-          <rect x="0" y="0" [attr.width]="coreWidth" [attr.height]="coreHeight" rx="5" ry="5" style="stroke-width:0" [style.fill]="nodePrimaryColor"></rect>
-          <path [attr.d]="headerPath" [style.fill]="accentColor"></path>
-          <g>
-            <text class="node-text">
-              <tspan x="55" y="15" text-anchor="middle">{{node.name}}</tspan>
-              <tspan x="55" y="67" text-anchor="middle">id = {{node.id}}</tspan>
-            </text>
-          </g>
-        </svg>
-      </g>
-
-    </g>
+        <rect x="0" y="0" [attr.width]="coreWidth" [attr.height]="coreHeight" rx="5" ry="5" style="stroke-width:0" [style.fill]="nodePrimaryColor"></rect>
+        <path [attr.d]="headerPath" [style.fill]="accentColor"></path>
+        <g>
+          <text class="node-text">
+            <tspan x="55" y="15" text-anchor="middle">{{node.name}}</tspan>
+            <tspan x="55" y="67" text-anchor="middle">id = {{node.id}}</tspan>
+          </text>
+        </g>
+      </svg>
   </g>
 </svg>

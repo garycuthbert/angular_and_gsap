@@ -16,15 +16,6 @@
         <rect width="80" height="80" [attr.fill]="'url(#smallGrid-' + tabIndex+ ')'"/>
         <path d="M 80 0 L 0 0 0 80" fill="none" stroke-width="1" class="gridLineTheme"/>
       </pattern>
-
-      <!-- Dim an SVG image on the map -->
-      <filter id="{{'node-icon-map-dim-' + tabIndex}}">
-        <feComponentTransfer>
-          <feFuncR type="linear" slope="0.1" />
-          <feFuncG type="linear" slope="0.1" />
-          <feFuncB type="linear" slope="0.1" />
-        </feComponentTransfer>
-      </filter>
     </defs>
 
     <!-- Add Grid backgorund -->

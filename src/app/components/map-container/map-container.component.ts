@@ -54,7 +54,7 @@ export class MapContainerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log(`Map ${this.mapName} initialized`);
+    //console.log(`Map ${this.mapName} initialized`);
 
     this.mapTopologyPan = new MapTopologyPan(
       this.mapName,
@@ -68,11 +68,11 @@ export class MapContainerComponent implements OnInit, AfterViewInit, OnDestroy {
       this
     );
 
-    console.log('Map Topology Component initialised for map: ' + this.mapName + ', domNodes = ', this.domNodes);
-    let delay = 100;
-    setTimeout(() => {
-      console.log(`Map Topology Component initialised (after ${delay} ms) for map: ${this.mapName}, domNodes = `, this.domNodes);
-    }, delay);
+    // console.log('Map Topology Component initialised for map: ' + this.mapName + ', domNodes = ', this.domNodes);
+    // let delay = 100;
+    // setTimeout(() => {
+    //   console.log(`Map Topology Component initialised (after ${delay} ms) for map: ${this.mapName}, domNodes = `, this.domNodes);
+    // }, delay);
   }
 
   ngAfterViewInit(): void {
@@ -88,9 +88,7 @@ export class MapContainerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Draggables
     this.deleteDraggableProxy();
-    this.deleteDraggableMapNodes();
-
-    this.mapTopologyNodeHandler?.onDestroy();
+    //this.deleteDraggableMapNodes();
   }
 
   public onMapBackgroundDoubleClick(event: MouseEvent): void {
@@ -119,7 +117,9 @@ export class MapContainerComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    this.mapTopologyNodeHandler?.makeNodeDraggable(this.domNodes, index);
+    // In our main application we support drag for moving items around, i have disabled this in this example
+    // as it is not required to reproduce the issue.
+    //this.mapTopologyNodeHandler?.makeNodeDraggable(this.domNodes, index);
     //console.log(`Map ${this.mapName} node ${id} pointer over`);
   }
 
@@ -160,6 +160,10 @@ export class MapContainerComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
+    // This method determines if the press is inside a node or not - in our main applcation we have draggable support to move
+    // nodes (not included in this example for simplicilty).
+    // It is the hit test code called from this method that calls getBBox triggers changes in the DOM that
+    // is losing our angular boudn dblClick event handler on the node.
     this.proxyClickInsideNodeBounds = this.isClickInsideNodeBounds(draggable.pointerX, draggable.pointerY);
 
     if (!this.proxyClickInsideNodeBounds) {
@@ -216,6 +220,7 @@ export class MapContainerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     for (let i = 0; i < nodes.length; i++) {
       if (this.elementRectHitTest(nodes[i], pointerX, pointerY)) {
+        //console.log(`isClickInsideNodeBounds: Node hit detected at ${pointerX}, ${pointerY}`);
         return true;
       }
     }
@@ -223,33 +228,31 @@ export class MapContainerComponent implements OnInit, AfterViewInit, OnDestroy {
     return false;
   }
 
-  private elementRectHitTest(element: ElementRef, x: number, y: number): boolean {
+  private elementRectHitTest(element: ElementRef, pointerX: number, pointerY: number): boolean {
     let result = false;
 
     if (element != null) {
-      const rect = element.nativeElement.getBoundingClientRect();
-      //const svgRect = element.nativeElement.ownerSVGElement.getBoundingClientRect();
+
+      //console.log(`elementRectHitTest: x = ${pointerX}, y = ${pointerY}`);
+
+      // In our main app we need to use getBBox due to an issue with FireFox and getBoundingClientRect in that it
+      // returns the dimensions of the SVG object rather than the inner dimensions of the contained rect.
+      // We alos have a zoom factor to consider in our main app so the logic to resolve the dimensions is more complex
+      // than this example (and this method will not be acurate in FireFox).
+
+      // The issue we are seeing is the call to getBBox is calling through to the CSSPlugin override which appears to
+      // do its own DOM manipulation during which we effectively lose our original element which had our binding to
+      // ondblclick through angular binding.
+
+      const domRect = element.nativeElement.getBoundingClientRect();
       const svgRect = element.nativeElement.getBBox();
-      let bboxWidth = svgRect.width;
-      let bboxHeight = svgRect.height;
-      const calculatedRect = new DOMRect(x, y, bboxWidth, bboxHeight);
-      //console.log(`elementRectHitTest: calculatedRect`, calculatedRect);
-      result = (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom);
+      //console.log(`elementRectHitTest: getBoundingClientRect`, domRect);
+      //console.log(`elementRectHitTest: getBBoxRect`, svgRect);
+
+      result = (pointerX >= domRect.left && pointerX <= domRect.right && pointerY >= domRect.top && pointerY <= domRect.bottom);
     }
 
     return result;
-  }
-
-  private deleteDraggableMapNodes() {
-    for (let i = 0; i < this.mapNodes.length; i++) {
-      const node = this.mapNodes[i];
-      if (this.mapNodes[i].draggable) {
-        this.mapNodes[i].draggable?.kill();
-        console.log(`Node ${node.id} draggable killed`);
-      }
-    }
-
-    this.mapNodes.length = 0;
   }
 
   // Convert screen coordinates to SVG coordinates

@@ -11,8 +11,6 @@ export class MapTopologyHandler {
 
   public maps: IMapDetails[] = <IMapDetails[]>mapsJSON;
 
-  //private timer1: NodeJS.Timer | undefined;
-
   constructor(
     private mapsContentService: MapsContentService,
     private mapName: string,
@@ -22,16 +20,7 @@ export class MapTopologyHandler {
 
   }
 
-  public onDestroy(): void {
-    // if (this.timer1 != null) {
-    //   clearTimeout(this.timer1);
-    // }
-  }
-
   public addNodesToModel(mapName: string, domNodes: QueryList<ElementRef>): void {
-
-    // Clear out any previous content
-    this.deleteAllDraggableNodes();
 
     // Build from our data source
     let nodes = this.mapsContentService.getMapDetails(mapName);
@@ -39,45 +28,13 @@ export class MapTopologyHandler {
       this.addNodeToModel(node);
     });
 
+
     setTimeout(() => {
+      // We position the nodes to information read from elsewhere after they have been added to the DOM
       this.setAllDomDefaultPositions(domNodes);
     }, 10);
   }
 
-  public makeNodeDraggable(domNodes: QueryList<ElementRef>, mapNodeIndex: number): void {
-    if (mapNodeIndex < 0 || mapNodeIndex >= this.mapNodes.length) {
-      console.error(`Invalid map node index ${mapNodeIndex} for map ${this.mapName}`);
-      return;
-    }
-
-    const node = this.mapNodes[mapNodeIndex];
-    if (node.draggable == null) {
-      if (domNodes) {
-        const domNode = domNodes.find((domNode: ElementRef) => domNode.nativeElement.id === node.id);
-        if (!domNode) {
-          console.error(`DOM node ${node.id} not found for map ${this.mapName} unable to make node draggable`);
-          return;
-        }
-
-        // Make the node draggable
-        node.draggable = Draggable.create(domNode.nativeElement, {
-          type: 'x,y',
-          minDuration: 6,
-          onDragStart: this.onNodeDragStart,
-          onDragStartParams: [node.id],
-          onDrag: this.onNodeDrag,
-          onDragParams: [node.id],
-          onDragEnd: this.onNodeDragEnd,
-          onDragEndParams: [node.id],
-          callbackScope: this
-        })[0];
-
-        node.draggable.update();
-      } else {
-        console.error(`DOM nodes not found for map ${this.mapName} unable to make node ${node.id} draggable`);
-      }
-    }
-  }
 
   private addNodeToModel(node: INodeDetails): void {
     this.mapNodes.push({
@@ -88,28 +45,6 @@ export class MapTopologyHandler {
         coreWidth: 0,
         coreHeight: 0
     });
-  }
-
-  private onNodeDragStart(id: string): void {
-    console.log(`Node ${id} drag started`);
-  }
-
-  private onNodeDrag(id: string): void {
-    console.log(`Node ${id} dragging in progress`);
-  }
-
-  private onNodeDragEnd(id: string): void {
-    console.log(`Node ${id} drag ended`);
-  }
-
-  private deleteAllDraggableNodes(): void {
-    // Check for Draggable instances and kill them
-    for (let i = 0; i < this.mapNodes.length; i++) {
-      this.mapNodes[i].draggable?.kill();
-    }
-
-    // Clear the collection
-    this.mapNodes.length = 0;
   }
 
   private setAllDomDefaultPositions(domeNodes: QueryList<ElementRef>): void {
@@ -133,6 +68,11 @@ export class MapTopologyHandler {
 
     const mapNode = this.mapNodes[nodeIndex];
 
+    // Position the node to its required position - in this example it is just part of the model data - in our main application
+    // it is retrieved from elswhere.
+
+    // It looks like this is the call that mutates the elements on our tab(s) not currently visible with the overridden getBBox method
+    // The initial active tab node elements do have gsap content but not the overridden getBBox method - not sure why this is the case.
     gsap.to(
       domNode.nativeElement,
       {

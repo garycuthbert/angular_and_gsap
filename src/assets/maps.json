@@ -30,44 +30,18 @@
         "yPos": 50,
         "selected": false,
         "disabled": false
-      }
-    ]
-  },
-  {
-    "name": "map3",
-    "nodes": [
-      {
-        "name": "Map3-Node1",
-        "id": "3.1",
-        "xPos": 100,
-        "yPos": 50,
-        "selected": false,
-        "disabled": false
-      }
-    ]
-  },
-  {
-    "name": "map4",
-    "nodes": [
-      {
-        "name": "Map4-Node1",
-        "id": "4.1",
-        "xPos": 100,
-        "yPos": 50,
-        "selected": false,
-        "disabled": false
       },
       {
-        "name": "Map4-Node2",
-        "id": "4.2",
+        "name": "Map2-Node2",
+        "id": "2.2",
         "xPos": 220,
         "yPos": 170,
         "selected": false,
         "disabled": true
       },
       {
-        "name": "Map4-Node3",
-        "id": "4.3",
+        "name": "Map2-Node3",
+        "id": "2.3",
         "xPos": 340,
         "yPos": 290,
         "selected": false,
