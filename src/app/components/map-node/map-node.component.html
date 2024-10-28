@@ -1,0 +1,46 @@
+<svg [attr.x]="node.xPos"
+     [attr.y]="node.yPos"
+     [attr.width]="nodeWidth"
+     [attr.height]="nodeHeight"
+     [attr.viewbox]="nodeViewBox"
+     (dblclick)="onDblClick($event); $event.stopPropagation();">
+
+  <defs>
+    <filter id="{{'node-icon-map-highlight-' + node.id}}" primitiveUnits="userSpaceOnUse">
+      <feFlood [ngClass]="{'Selected':'node-icon-selected', 'Focussed':'node-icon-focussed', 'None' : ''}[nodeHighlightState]"
+               result="flood" flood-opacity="1">
+      </feFlood>
+      <feComposite in="flood" result="mask" in2="SourceGraphic" operator="in"></feComposite>
+      <feMorphology in="mask" result="dilated" operator="dilate" radius="6"></feMorphology>
+      <feGaussianBlur in="dilated" result="blurred" stdDeviation="2"></feGaussianBlur>
+      <feMerge>
+        <feMergeNode in="blurred"></feMergeNode>
+        <feMergeNode in="SourceGraphic"></feMergeNode>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- node "greying" -->
+  <g [style.fill]="(!node.disabled) ? '#666666' : null">
+
+    <!-- node Highlighting -->
+    <g [style.filter]="nodeHighlightState !== 'None' ? nodeHighlightFilterUrl : null" (mouseenter)="isHovering=true" (mouseleave)="isHovering=false">
+
+      <g>
+        <svg x="40" y="40" [attr.width]="coreWidth" [attr.height]="coreHeight" [attr.viewBox]="coreViewBox"
+          [style.filter]="node.disabled ? 'url(#node-icon-map-dim-' + tabIndex + ')' : null">
+
+          <rect x="0" y="0" [attr.width]="coreWidth" [attr.height]="coreHeight" rx="5" ry="5" style="stroke-width:0" [style.fill]="nodePrimaryColor"></rect>
+          <path [attr.d]="headerPath" [style.fill]="accentColor"></path>
+          <g>
+            <text class="node-text">
+              <tspan x="55" y="15" text-anchor="middle">{{node.name}}</tspan>
+              <tspan x="55" y="67" text-anchor="middle">id = {{node.id}}</tspan>
+            </text>
+          </g>
+        </svg>
+      </g>
+
+    </g>
+  </g>
+</svg>

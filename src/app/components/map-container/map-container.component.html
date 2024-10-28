@@ -1,0 +1,49 @@
+<!-- <p>map-container works! name = {{mapName}}</p> -->
+<div #mapTopologyZoneContainer>
+  <!-- Edit controls overlay panel -->
+  <svg #mapTopologyZone
+    width="1920"
+    height="1080"
+    viewBox="0 0 1920 1080"
+    xmlns="http://www.w3.org/2000/svg"
+    (dblclick)="onMapBackgroundDoubleClick($event)">
+
+    <defs>
+      <pattern id="{{ 'smallGrid-' + tabIndex}}" width="8" height="8" patternUnits="userSpaceOnUse">
+        <path d="M 8 0 L 0 0 0 8" fill="none" stroke-width="0.5" class="gridLineTheme"/>
+      </pattern>
+      <pattern id="{{ 'grid-' + tabIndex}}" width="80" height="80" patternUnits="userSpaceOnUse">
+        <rect width="80" height="80" [attr.fill]="'url(#smallGrid-' + tabIndex+ ')'"/>
+        <path d="M 80 0 L 0 0 0 80" fill="none" stroke-width="1" class="gridLineTheme"/>
+      </pattern>
+
+      <!-- Dim an SVG image on the map -->
+      <filter id="{{'node-icon-map-dim-' + tabIndex}}">
+        <feComponentTransfer>
+          <feFuncR type="linear" slope="0.1" />
+          <feFuncG type="linear" slope="0.1" />
+          <feFuncB type="linear" slope="0.1" />
+        </feComponentTransfer>
+      </filter>
+    </defs>
+
+    <!-- Add Grid backgorund -->
+    <rect [style.visibility]="mapGridEnabled ? 'visible' : 'hidden'" #grid x="0" y="0" width="100%" height="100%" [attr.fill]="'url(#grid-' + tabIndex + ')'"/>
+
+    <ng-container *ngFor="let mapNode of mapNodes; let i = index">
+      <g *ngIf="true">
+        <svg:g #node
+          app-map-node
+          [node]="mapNode"
+          [tabIndex]="tabIndex"
+          [id]="mapNode.id"
+          [style.opacity]="1"
+          (click)="onMapNodeClick($event, mapNode.id)"
+          (dblclick)="onMapNodeDblClick($event, mapNode.id);"
+          (pointerover)="onNodePointerOver($event, mapNode.id)"
+        />
+      </g>
+    </ng-container>
+  </svg>
+  <div #proxy></div>
+</div>

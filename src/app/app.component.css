@@ -1,0 +1,54 @@
+.page-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.toolbar {
+  flex: 0 0 auto;
+}
+
+.route-display {
+  display: flex;
+  flex: 1 0 0;
+}
+
+.tbAppTitleWidth {
+  flex: 1 0 0;
+}
+
+.tbButtonsWidth {
+  flex: 4 0 0;
+}
+
+.tbRightSpacerWidth {
+  flex: 1 0 0;
+}
+
+.tbButtonSpacer {
+  flex: 0 0 2em;
+}
+
+.tbButtons {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: start;
+}
+
+.tbButtonRow {
+  display: flex;
+  flex: 1 0 0;
+  justify-content: flex-start;
+}
+
+.end {
+  justify-content: end;
+}
+
+.spacer {
+  flex: 1 0 10%;
+}
+

@@ -1,0 +1,10 @@
+<mat-tab-group>
+  <mat-tab *ngFor="let mapName of mapNames; let i = index">
+    <ng-template mat-tab-label>
+      <div>{{mapName}}</div>
+    </ng-template>
+    <div class="app-flex-col app-flex-fill map-page">
+      <app-map-container [mapName]="mapName" [tabIndex]="i"></app-map-container>
+    </div>
+  </mat-tab>
+</mat-tab-group>

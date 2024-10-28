@@ -1,0 +1,78 @@
+[
+  {
+    "name": "map1",
+    "nodes": [
+      {
+        "name": "Map1-Node1",
+        "id": "1.1",
+        "xPos": 100,
+        "yPos": 50,
+        "selected": false,
+        "disabled": false
+      },
+      {
+        "name": "Map1-Node2",
+        "id": "1.2",
+        "xPos": 220,
+        "yPos": 170,
+        "selected": false,
+        "disabled": false
+      }
+    ]
+  },
+  {
+    "name": "map2",
+    "nodes": [
+      {
+        "name": "Map2-Node1",
+        "id": "2.1",
+        "xPos": 100,
+        "yPos": 50,
+        "selected": false,
+        "disabled": false
+      }
+    ]
+  },
+  {
+    "name": "map3",
+    "nodes": [
+      {
+        "name": "Map3-Node1",
+        "id": "3.1",
+        "xPos": 100,
+        "yPos": 50,
+        "selected": false,
+        "disabled": false
+      }
+    ]
+  },
+  {
+    "name": "map4",
+    "nodes": [
+      {
+        "name": "Map4-Node1",
+        "id": "4.1",
+        "xPos": 100,
+        "yPos": 50,
+        "selected": false,
+        "disabled": false
+      },
+      {
+        "name": "Map4-Node2",
+        "id": "4.2",
+        "xPos": 220,
+        "yPos": 170,
+        "selected": false,
+        "disabled": true
+      },
+      {
+        "name": "Map4-Node3",
+        "id": "4.3",
+        "xPos": 340,
+        "yPos": 290,
+        "selected": false,
+        "disabled": false
+      }
+    ]
+  }
+]

@@ -1,0 +1,13 @@
+.node-icon-focussed {
+  flood-color: #a6a6a6;
+}
+
+.node-icon-selected {
+  flood-color: snow;
+}
+
+.node-text {
+  font-size: 12px;
+  font-weight: bold;
+  fill: #fff;
+}

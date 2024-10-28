@@ -1,1 +1,40 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.debug-red {
+  border: 1px solid red;
+}
+
+.debug-green {
+  border: 1px solid green;
+}
+
+.debug-blue {
+  border: 1px solid blue;
+}
+
+.app-content .app-flex-row {
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: row;
+}
+
+.app-content .app-flex-col {
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: column;
+}
+
+.app-content .app-flex-fill {
+  margin: 0px;
+  width: 100%;
+  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+.gridLineTheme {
+  stroke: gray;
+}
