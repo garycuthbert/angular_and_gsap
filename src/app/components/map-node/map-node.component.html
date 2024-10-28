@@ -2,8 +2,7 @@
      [attr.y]="node.yPos"
      [attr.width]="nodeWidth"
      [attr.height]="nodeHeight"
-     [attr.viewbox]="nodeViewBox"
-     (dblclick)="onDblClick($event); $event.stopPropagation();">
+     [attr.viewbox]="nodeViewBox">
 
   <defs>
     <filter id="{{'node-icon-map-highlight-' + node.id}}" primitiveUnits="userSpaceOnUse">

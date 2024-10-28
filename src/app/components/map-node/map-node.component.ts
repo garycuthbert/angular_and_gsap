@@ -64,10 +64,6 @@ export class MapNodeComponent implements OnInit, DoCheck {
     this.updateHighlightState();
   }
 
-  public onDblClick(event: MouseEvent): void {
-    console.log(`NodeComponent : Tab ${this.tabIndex} node ${this.node.name} double clicked`);
-  }
-
   private updateHighlightState(): void {
     if (this.node.selected) {
       this.nodeHighlightState = NodeHighlightType.Selected;

@@ -39,8 +39,8 @@
           [id]="mapNode.id"
           [style.opacity]="1"
           (click)="onMapNodeClick($event, mapNode.id)"
-          (dblclick)="onMapNodeDblClick($event, mapNode.id);"
-          (pointerover)="onNodePointerOver($event, mapNode.id)"
+          (dblclick)="onMapNodeDblClick($event, mapNode.id); $event.stopPropagation();"
+          (pointerover)="onNodePointerOver($event, mapNode.id);"
         />
       </g>
     </ng-container>
