@@ -1,7 +1,8 @@
-import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, Input, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { gsap, Draggable } from 'gsap/all';
 import { IDraggableMapNode } from '../../model/map.model';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MapNodeComponent } from '../map-node/map-node.component';
 import { MapTopologyPan } from './map-topology-pan';
 import { MapTopologyHandler } from './map-topology-handler';
@@ -15,12 +16,16 @@ gsap.registerPlugin(Draggable);
   standalone: true,
   imports: [
     CommonModule,
+    MatSnackBarModule,
     MapNodeComponent
   ],
   templateUrl: './map-container.component.html',
   styleUrl: './map-container.component.css'
 })
 export class MapContainerComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  private _snackBar = inject(MatSnackBar);
+  durationInSeconds = 5;
 
   // Helper class instances
   public mapTopologyPan?: MapTopologyPan;
@@ -108,6 +113,8 @@ export class MapContainerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public onMapNodeDblClick(event: MouseEvent, id: string): void {
     console.log(`Map ${this.mapName} node ${id} double clicked`);
+
+    this.openSnackBar(`Node ${id} double clicked`);
   }
 
   public onNodePointerOver(event: MouseEvent, id: string): void {
@@ -149,6 +156,8 @@ export class MapContainerComponent implements OnInit, AfterViewInit, OnDestroy {
     })[0];
 
     this.proxyDraggable.update();
+
+    //console.log(`Proxy draggable created`);
   }
 
 
@@ -217,6 +226,7 @@ export class MapContainerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private isClickInsideNodeBounds(pointerX: number, pointerY: number): boolean {
     const nodes = this.domNodes.toArray();
+    //console.log(`isClickInsideNodeBounds: called! pointerX = ${pointerX}, pointerY = ${pointerY}`);
 
     for (let i = 0; i < nodes.length; i++) {
       if (this.elementRectHitTest(nodes[i], pointerX, pointerY)) {
@@ -247,7 +257,7 @@ export class MapContainerComponent implements OnInit, AfterViewInit, OnDestroy {
       const domRect = element.nativeElement.getBoundingClientRect();
       const svgRect = element.nativeElement.getBBox();
       //console.log(`elementRectHitTest: getBoundingClientRect`, domRect);
-      //console.log(`elementRectHitTest: getBBoxRect`, svgRect);
+      console.log(`elementRectHitTest: getBBoxRect`, svgRect);
 
       result = (pointerX >= domRect.left && pointerX <= domRect.right && pointerY >= domRect.top && pointerY <= domRect.bottom);
     }
@@ -268,5 +278,11 @@ export class MapContainerComponent implements OnInit, AfterViewInit, OnDestroy {
     point.y = y;
 
     return point.matrixTransform(elementRef.nativeElement.getScreenCTM()?.inverse());
+  }
+
+  private openSnackBar(message: string) {
+    this._snackBar.open(message, 'Close', {
+      duration: this.durationInSeconds * 1000,
+    });
   }
 }
