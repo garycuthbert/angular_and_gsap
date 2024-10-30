@@ -255,9 +255,22 @@ export class MapContainerComponent implements OnInit, AfterViewInit, OnDestroy {
       // ondblclick through angular binding.
 
       const domRect = element.nativeElement.getBoundingClientRect();
+
+      // This is the call that is causing the issue when the gsap version of getBBox is in effect!
       const svgRect = element.nativeElement.getBBox();
+
+      // This is the workaround - check for the gsap backup of the native call and call that instead if present!
+      // let svgRect = null;
+      // if (element.nativeElement._gsapBBox != null && typeof element.nativeElement._gsapBBox === 'function') {
+      //   svgRect = element.nativeElement._gsapBBox();
+      //   console.log(`elementRectHitTest: _gsapBBox returned`, svgRect);
+      // } else {
+      //   svgRect = element.nativeElement.getBBox();
+      //   console.log(`elementRectHitTest: getBBox returned`, svgRect);
+      // }
+
       //console.log(`elementRectHitTest: getBoundingClientRect`, domRect);
-      console.log(`elementRectHitTest: getBBoxRect`, svgRect);
+      //console.log(`elementRectHitTest: getBBoxRect`, svgRect);
 
       result = (pointerX >= domRect.left && pointerX <= domRect.right && pointerY >= domRect.top && pointerY <= domRect.bottom);
     }
